@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kitakyushu_shukatu/ui/home/home_page.dart';
 import 'ui/MyPage/my_page.dart';
 
 class MyApp extends StatelessWidget {
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyPage(title: '北九就'),
+      home: const HomePage(),
     );
   }
 }
