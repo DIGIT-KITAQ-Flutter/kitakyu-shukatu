@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "382840130626",
+    "project_id": "kitakyushu-shukatu",
+    "storage_bucket": "kitakyushu-shukatu.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382840130626:android:c65535a93eb4a00ef3f1db",
+        "android_client_info": {
+          "package_name": "com.example.kitakyushu_shukatu"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApys698KtNXVMz9sehbfpGeNbS868Km70"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
