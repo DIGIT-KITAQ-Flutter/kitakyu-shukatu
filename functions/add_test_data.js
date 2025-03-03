@@ -18,7 +18,8 @@ const db = admin.firestore();
 const addTestData = async () => {
     try {
         // Read the company.json file from parent directory using an absolute path
-        const companyFilePath = path.join(__dirname, '..', 'company.json');
+        // const companyFilePath = path.join(__dirname, '..', 'company.json');
+        const companyFilePath = 'company.json';
         const fileData = fs.readFileSync(companyFilePath, 'utf8');
         const data = JSON.parse(fileData);
 
