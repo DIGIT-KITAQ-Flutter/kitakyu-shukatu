@@ -4,13 +4,8 @@ import 'package:kitakyushu_shukatu/models/company.dart';
 class CompanyListPage extends StatefulWidget {
   const CompanyListPage({Key? key}) : super(key: key);
 
-  @override
-  State<CompanyListPage> createState() => _CompanyListPageState();
-}
-
-class _CompanyListPageState extends State<CompanyListPage> {
-  // サンプル企業データ - 実際のアプリではAPIやデータベースから取得する
-  final List<Company> companies = [
+  // 企業リストを `static` にして外部からアクセス可能にする
+  static final List<Company> companies = [
     Company(
       id: '1',
       name: '株式会社テクノロジー',
@@ -35,14 +30,19 @@ class _CompanyListPageState extends State<CompanyListPage> {
   ];
 
   @override
+  State<CompanyListPage> createState() => _CompanyListPageState();
+}
+
+class _CompanyListPageState extends State<CompanyListPage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('企業一覧')),
       body: ListView.builder(
         padding: const EdgeInsets.all(16.0),
-        itemCount: companies.length,
+        itemCount: CompanyListPage.companies.length,
         itemBuilder: (context, index) {
-          final company = companies[index];
+          final company = CompanyListPage.companies[index];
           return CompanyCard(company: company);
         },
       ),
