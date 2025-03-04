@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:kitakyushu_shukatu/models/company.dart';
+import 'package:kitakyushu_shukatu/ui/favorite/favorite_manager.dart'; // お気に入り管理クラス
 
 class CompanyListPage extends StatefulWidget {
   const CompanyListPage({Key? key}) : super(key: key);
 
-  // 企業リストを `static` にして外部からアクセス可能にする
   static final List<Company> companies = [
     Company(
       id: '1',
@@ -57,6 +58,9 @@ class CompanyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final favoriteManager = context.watch<FavoriteManager>(); // Provider でお気に入り情報を監視
+    final isFavorite = favoriteManager.isFavorite(company);
+
     return Card(
       margin: const EdgeInsets.only(bottom: 16.0),
       elevation: 4.0,
@@ -64,28 +68,45 @@ class CompanyCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(12.0),
-            ),
-            child: Image.network(
-              company.imageUrl,
-              height: 150,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
+          Stack(
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(12.0),
+                ),
+                child: Image.network(
+                  company.imageUrl,
                   height: 150,
                   width: double.infinity,
-                  color: Colors.grey[300],
-                  child: const Icon(
-                    Icons.business,
-                    size: 50,
-                    color: Colors.grey,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      height: 150,
+                      width: double.infinity,
+                      color: Colors.grey[300],
+                      child: const Icon(
+                        Icons.business,
+                        size: 50,
+                        color: Colors.grey,
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Positioned(
+                top: 8,
+                right: 8,
+                child: IconButton(
+                  icon: Icon(
+                    isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: isFavorite ? Colors.red : Colors.white,
                   ),
-                );
-              },
-            ),
+                  onPressed: () {
+                    favoriteManager.toggleFavorite(company);
+                  },
+                ),
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),

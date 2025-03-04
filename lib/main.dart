@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:kitakyushu_shukatu/ui/Home/home_page.dart';
 import 'package:kitakyushu_shukatu/ui/Company/company_list_page.dart';
 import 'package:kitakyushu_shukatu/ui/MyPage/my_page.dart';
 import 'package:kitakyushu_shukatu/ui/favorite/favorites_page.dart';
 import 'package:kitakyushu_shukatu/ui/search/search_page.dart';
+import 'package:kitakyushu_shukatu/ui/favorite/favorite_manager.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => FavoriteManager(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -33,9 +40,9 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _screens = [
     const HomePage(),
-    const CompanyListPage(),
-    const FavoritesPage(),
     const SearchPage(),
+    const CompanyListPage(),
+    FavoritesPage(),
     const MyPage(),
   ];
 
