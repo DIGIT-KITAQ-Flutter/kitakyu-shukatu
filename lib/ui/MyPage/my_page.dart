@@ -1,46 +1,96 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kitakyushu_shukatu/ui/Auth/view/auth_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class MyPage extends StatelessWidget {
+class MyPage extends StatefulWidget {
   const MyPage({super.key});
+
+  @override
+  _MyPageState createState() => _MyPageState();
+}
+
+class _MyPageState extends State<MyPage> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _noteController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _nameController.text = prefs.getString('user_name') ?? '';
+      _noteController.text = prefs.getString('user_note') ?? '';
+    });
+  }
+
+  Future<void> _saveUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user_name', _nameController.text);
+    await prefs.setString('user_note', _noteController.text);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          // データがまだロードされていない場合はローディングを表示
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
 
-          // ユーザーがログインしていない場合はログイン画面を表示
           if (!snapshot.hasData) {
             return AuthPage();
           }
 
-          final user = snapshot.data!; // ログイン済みのユーザー情報を取得
-
-          return Center(
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.account_circle, size: 100),
-                Text(
-                  "ログイン中: ${user.email}",
-                  style: const TextStyle(fontSize: 18),
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  color: Colors.grey[300],
+                  child: TextField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: '名前',
+                    ),
+                    onChanged: (value) => _saveUserData(),
+                  ),
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () async {
-                    await FirebaseAuth.instance.signOut();
-                  },
-                  child: const Text("ログアウト"),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    color: Colors.grey[300],
+                    child: TextField(
+                      controller: _noteController,
+                      maxLines: null,
+                      expands: true,
+                      keyboardType: TextInputType.multiline,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'ノート',
+                      ),
+                      onChanged: (value) => _saveUserData(),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await FirebaseAuth.instance.signOut();
+                    },
+                    child: const Text("ログアウト"),
+                  ),
                 ),
               ],
             ),

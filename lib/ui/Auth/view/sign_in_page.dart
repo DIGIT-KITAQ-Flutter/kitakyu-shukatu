@@ -81,59 +81,60 @@ class _AuthPage extends State<AuthPage> {
                 const SizedBox(height: 15),
                 ElevatedButton(
                   child: const Text('ログイン'),
-                  onPressed: () async {
-                    try {
-                      // メール/パスワードでログイン
-                      final User? user =
-                          (await FirebaseAuth.instance
-                              .signInWithEmailAndPassword(
-                                email: email,
-                                password: password,
-                              )).user;
-                      if (user != null) {
-                        print("ログインしました　${user.email} , ${user.uid}");
-                        setState(() {
-                          email = '';
-                          password = '';
-                        });
-                        emailController.clear();
-                        passwordController.clear();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AccountSettingPage(),
-                          ),
-                        );
-                      }
-                    } catch (e) {
-                      // エラーが発生した場合
-                      setState(() {
-                        errorMessage = 'メールアドレスまたはパスワードが間違っています';
-                      });
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Login Error'),
-                            content: Text(errorMessage),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  setState(() {
-                                    password = '';
-                                  });
-                                  passwordController.clear();
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                      print(e);
-                    }
-                  },
+               onPressed: () async {
+  try {
+    final User? user = (await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+              email: email,
+              password: password,
+            ))
+        .user;
+    if (user != null) {
+      print("ログインしました ${user.email} , ${user.uid}");
+      setState(() {
+        email = '';
+        password = '';
+      });
+      emailController.clear();
+      passwordController.clear();
+
+      // `push` ではなく `pushReplacement` を使う
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(), // ホーム画面（ボトムナビ付き）へ遷移
+        ),
+      );
+    }
+  } catch (e) {
+    setState(() {
+      errorMessage = 'メールアドレスまたはパスワードが間違っています';
+    });
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Login Error'),
+          content: Text(errorMessage),
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  password = '';
+                });
+                passwordController.clear();
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+    print(e);
+  }
+}
+
                 ),
                 if (errorMessage.isNotEmpty)
                   Padding(

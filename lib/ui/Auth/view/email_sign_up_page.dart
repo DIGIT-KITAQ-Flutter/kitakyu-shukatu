@@ -78,7 +78,15 @@ class _EmailSignUpState extends State<EmailSignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('ログイン')),
+      appBar: AppBar(
+        title: const Text('ログイン'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back), // 戻るボタン
+          onPressed: () {
+            Navigator.pop(context); // 前の画面に戻る
+          },
+        ),
+      ),
       body: BackgroundAnimation1(
         size: MediaQuery.of(context).size,
         child: Padding(
