@@ -6,8 +6,12 @@ import 'package:kitakyushu_shukatu/ui/MyPage/my_page.dart';
 import 'package:kitakyushu_shukatu/ui/favorite/favorites_page.dart';
 import 'package:kitakyushu_shukatu/ui/search/search_page.dart';
 import 'package:kitakyushu_shukatu/ui/favorite/favorite_manager.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     ChangeNotifierProvider(
       create: (context) => FavoriteManager(),
@@ -43,7 +47,7 @@ class _MainScreenState extends State<MainScreen> {
     const SearchPage(),
     const CompanyListPage(),
     FavoritesPage(),
-    const MyPage(),
+    MyPage(),
   ];
 
   void _onItemTapped(int index) {
