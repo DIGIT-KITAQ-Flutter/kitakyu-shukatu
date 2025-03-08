@@ -3,12 +3,10 @@ import 'package:kitakyushu_shukatu/ui/company/company_details_page.dart';
 import 'package:provider/provider.dart';
 import 'package:kitakyushu_shukatu/models/company.dart';
 import 'package:kitakyushu_shukatu/ui/favorite/favorite_manager.dart';
-import 'package:kitakyushu_shukatu/ui/company/company_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CompanyListPage extends StatefulWidget {
   CompanyListPage({Key? key}) : super(key: key);
-  final CompanyManager companyManager = CompanyManager();
   static final List<Company> companies = [];
 
   @override
