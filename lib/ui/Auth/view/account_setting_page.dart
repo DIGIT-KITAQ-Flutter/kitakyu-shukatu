@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kitakyushu_shukatu/ui/main/main_page.dart';
 import '../../components/background_animation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AccountSettingPage extends StatefulWidget {
   const AccountSettingPage({Key? key}) : super(key: key);
@@ -29,6 +30,10 @@ class _AccountSettingState extends State<AccountSettingPage> {
       try {
         await user.updateProfile(displayName: userName);
         await user.reload();
+        // Update the username in Firestore
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'username': userName,
+        }, SetOptions(merge: true));
         print('ユーザー名が更新されました: ${userName}');
         Navigator.pushReplacement(
           context,

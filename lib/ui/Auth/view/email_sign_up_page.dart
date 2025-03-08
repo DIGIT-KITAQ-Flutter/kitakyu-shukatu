@@ -30,42 +30,27 @@ class _EmailSignUpState extends State<EmailSignUpPage> {
 
   Future<void> createUserDocument(String userId) async {
     try {
-      // // Firestoreにユーザードキュメントを作成
-      // await FirebaseFirestore.instance.collection('users').doc(userId).set({
-      //   'email': email,
-      //   'createdAt': FieldValue.serverTimestamp(),
-      //   'username': '',
-      // });
       // Firestoreにユーザードキュメントを作成
       await FirebaseFirestore.instance.collection('users').doc(userId).set({
         'email': email,
         'createdAt': FieldValue.serverTimestamp(),
         'username': '',
-        'selectedGenres': [],
       });
 
-      // 空の`selectedAnime`コレクションを作成
+      // 空の`favoriteCompanies`コレクションを作成
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userId)
-          .collection('selectedAnime')
-          .doc('0')
+          .collection('data')
+          .doc('favoriteCompanies')
           .set({});
 
-      // 空の`meishies`コレクションを作成
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userId)
-          .collection('meishies')
-          .doc('Tr02PKzArJexjIRw4bWjBxseENH3')
+          .collection('data')
+          .doc('entrySheet')
           .set({});
-
-      // await FirebaseFirestore.instance
-      //     .collection('users')
-      //     .doc(userId)
-      //     .collection('meishies')
-      //     .doc('dummy')
-      //     .delete();
 
       print('ユーザードキュメントとコレクションを作成しました');
     } catch (e) {
