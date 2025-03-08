@@ -1,7 +1,6 @@
 // 遷移先
 import 'package:kitakyushu_shukatu/ui/auth/view/email_login_page.dart';
 import 'package:kitakyushu_shukatu/ui/auth/view/email_sign_up_page.dart';
-import 'package:kitakyushu_shukatu/ui/Home/home_page.dart';
 
 // 標準
 import 'package:flutter/material.dart';
