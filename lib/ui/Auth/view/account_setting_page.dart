@@ -1,9 +1,7 @@
-import 'package:kitakyushu_shukatu/ui/home/home_page.dart';
-import 'package:kitakyushu_shukatu/ui/Auth/view/auth_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:kitakyushu_shukatu/ui/main/main_page.dart';
 import '../../components/background_animation.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AccountSettingPage extends StatefulWidget {
   const AccountSettingPage({Key? key}) : super(key: key);
@@ -34,7 +32,7 @@ class _AccountSettingState extends State<AccountSettingPage> {
         print('ユーザー名が更新されました: ${userName}');
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => MainScreen()),
         );
       } catch (e) {
         setState(() {

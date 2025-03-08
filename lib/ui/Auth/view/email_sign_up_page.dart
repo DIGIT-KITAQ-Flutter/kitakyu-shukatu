@@ -1,6 +1,4 @@
 import 'package:kitakyushu_shukatu/ui/Auth/view/account_setting_page.dart';
-import 'package:kitakyushu_shukatu/ui/home/home_page.dart';
-import 'package:kitakyushu_shukatu/ui/Auth/view/auth_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../components/background_animation.dart';

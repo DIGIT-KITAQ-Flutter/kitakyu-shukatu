@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kitakyushu_shukatu/ui/home/home_page.dart';
-import 'ui/MyPage/my_page.dart';
+import 'package:kitakyushu_shukatu/ui/main/main_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -8,11 +7,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Kitakyushu-Shukatu',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const HomePage(),
+      title: '北九就',
+      debugShowCheckedModeBanner: false,
+      home: const MainScreen(),
     );
   }
 }

@@ -1,9 +1,9 @@
-import 'package:kitakyushu_shukatu/ui/auth/view/account_setting_page.dart';
-import 'package:kitakyushu_shukatu/ui/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 import 'dart:math';
+
+import 'package:kitakyushu_shukatu/ui/main/main_page.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);
@@ -81,60 +81,59 @@ class _AuthPage extends State<AuthPage> {
                 const SizedBox(height: 15),
                 ElevatedButton(
                   child: const Text('ログイン'),
-               onPressed: () async {
-  try {
-    final User? user = (await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-              email: email,
-              password: password,
-            ))
-        .user;
-    if (user != null) {
-      print("ログインしました ${user.email} , ${user.uid}");
-      setState(() {
-        email = '';
-        password = '';
-      });
-      emailController.clear();
-      passwordController.clear();
+                  onPressed: () async {
+                    try {
+                      final User? user =
+                          (await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                email: email,
+                                password: password,
+                              )).user;
+                      if (user != null) {
+                        print("ログインしました ${user.email} , ${user.uid}");
+                        setState(() {
+                          email = '';
+                          password = '';
+                        });
+                        emailController.clear();
+                        passwordController.clear();
 
-      // `push` ではなく `pushReplacement` を使う
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomePage(), // ホーム画面（ボトムナビ付き）へ遷移
-        ),
-      );
-    }
-  } catch (e) {
-    setState(() {
-      errorMessage = 'メールアドレスまたはパスワードが間違っています';
-    });
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Login Error'),
-          content: Text(errorMessage),
-          actions: [
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  password = '';
-                });
-                passwordController.clear();
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-    print(e);
-  }
-}
-
+                        // `push` ではなく `pushReplacement` を使う
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MainScreen(), // ホームへ遷移
+                          ),
+                        );
+                      }
+                    } catch (e) {
+                      setState(() {
+                        errorMessage = 'メールアドレスまたはパスワードが間違っています';
+                      });
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Login Error'),
+                            content: Text(errorMessage),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    password = '';
+                                  });
+                                  passwordController.clear();
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      print(e);
+                    }
+                  },
                 ),
                 if (errorMessage.isNotEmpty)
                   Padding(

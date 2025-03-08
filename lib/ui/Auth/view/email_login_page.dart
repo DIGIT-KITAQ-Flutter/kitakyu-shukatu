@@ -1,4 +1,4 @@
-import 'package:kitakyushu_shukatu/ui/home/home_page.dart';
+import 'package:kitakyushu_shukatu/ui/main/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../components/background_animation.dart';
@@ -39,7 +39,7 @@ class _EmailLoginPage extends State<EmailLoginPage> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => MainScreen()),
         );
       }
     } catch (e) {
@@ -69,7 +69,7 @@ class _EmailLoginPage extends State<EmailLoginPage> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => MainScreen()),
         );
       }
     } catch (e) {
@@ -138,10 +138,10 @@ class _EmailLoginPage extends State<EmailLoginPage> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(child: const Text('ログイン'), onPressed: _login),
-                // ElevatedButton(
-                //   child: const Text('テストログイン'),
-                //   onPressed: _testLogin,
-                // ),
+                ElevatedButton(
+                  child: const Text('テストログイン'),
+                  onPressed: _testLogin,
+                ),
                 ElevatedButton(
                   onPressed: _resetPassword,
                   child: const Text('パスワードリセット'),
