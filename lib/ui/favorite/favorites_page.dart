@@ -7,27 +7,29 @@ class FavoritesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final favoriteCompanies = context.watch<FavoriteManager>().favoriteCompanies;
+    final favoriteCompanies =
+        context.watch<FavoriteManager>().favoriteCompanies;
 
     return Scaffold(
       appBar: AppBar(title: const Text('お気に入り')),
-      body: favoriteCompanies.isEmpty
-          ? const Center(child: Text('お気に入りの企業がありません'))
-          : ListView.builder(
-              padding: const EdgeInsets.all(16.0),
-              itemCount: favoriteCompanies.length,
-              itemBuilder: (context, index) {
-                final company = favoriteCompanies[index];
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.pink[100],
-                    child: Text(company.name[0]), // 頭文字
-                  ),
-                  title: Text(company.name),
-                  subtitle: Text(company.industry),
-                );
-              },
-            ),
+      body:
+          favoriteCompanies.isEmpty
+              ? const Center(child: Text('お気に入りの企業がありません'))
+              : ListView.builder(
+                padding: const EdgeInsets.all(16.0),
+                itemCount: favoriteCompanies.length,
+                itemBuilder: (context, index) {
+                  final company = favoriteCompanies[index];
+                  return ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.pink[100],
+                      child: Text(company.name[0]), // 頭文字
+                    ),
+                    title: Text(company.name),
+                    subtitle: Text(company.industry ?? '未設定'),
+                  );
+                },
+              ),
     );
   }
 }
