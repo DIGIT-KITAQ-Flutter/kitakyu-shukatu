@@ -1,34 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:kitakyushu_shukatu/ui/company/company_details_page.dart';
 import 'package:provider/provider.dart';
 import 'package:kitakyushu_shukatu/models/company.dart';
-import 'package:kitakyushu_shukatu/ui/favorite/favorite_manager.dart'; // お気に入り管理クラス
+import 'package:kitakyushu_shukatu/ui/favorite/favorite_manager.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CompanyListPage extends StatefulWidget {
-  const CompanyListPage({Key? key}) : super(key: key);
-
-  static final List<Company> companies = [
-    Company(
-      id: '1',
-      name: '株式会社テクノロジー',
-      industry: 'IT・通信',
-      location: '福岡県北九州市',
-      imageUrl: 'https://via.placeholder.com/150',
-    ),
-    Company(
-      id: '2',
-      name: '福岡銀行',
-      industry: '金融',
-      location: '福岡県福岡市',
-      imageUrl: 'https://via.placeholder.com/150',
-    ),
-    Company(
-      id: '3',
-      name: '九州製造株式会社',
-      industry: '製造',
-      location: '福岡県北九州市',
-      imageUrl: 'https://via.placeholder.com/150',
-    ),
-  ];
+  CompanyListPage({Key? key}) : super(key: key);
+  static final List<Company> companies = [];
 
   @override
   State<CompanyListPage> createState() => _CompanyListPageState();
@@ -36,17 +15,75 @@ class CompanyListPage extends StatefulWidget {
 
 class _CompanyListPageState extends State<CompanyListPage> {
   @override
+  void initState() {
+    super.initState();
+    if (CompanyListPage.companies.isEmpty) {
+      print('Fetching companies...');
+      _fetchCompany();
+    }
+  }
+
+  Future<void> _fetchCompany() async {
+    List<Company> companiesList = [];
+    try {
+      final companies =
+          await FirebaseFirestore.instance.collection('companies').get();
+
+      // データ確認用のログ
+      print('Documents count: ${companies.docs.length}');
+
+      companies.docs.forEach((company) {
+        // データの型を確認
+        Map<String, dynamic> data = company.data();
+        // print('Company data: $data');
+
+        // locationフィールドの処理
+        String locationStr;
+        if (data['location'] is GeoPoint) {
+          GeoPoint geoPoint = data['location'];
+          locationStr = '${geoPoint.latitude}, ${geoPoint.longitude}';
+        } else if (data['location'] is String) {
+          locationStr = data['location'];
+        } else {
+          locationStr = '未設定';
+        }
+
+        companiesList.add(
+          Company(
+            id: company.id,
+            name: data['name'] ?? '名称未設定',
+            industry: data['industry'] ?? '未設定',
+            location: locationStr,
+            imageUrl: data['imageUrl'] ?? '',
+          ),
+        );
+      });
+
+      print('Fetched ${companiesList.length} companies');
+      setState(() {
+        print('Setting companies...');
+        CompanyListPage.companies.addAll(companiesList);
+      });
+    } catch (e) {
+      print('Error fetching companies: $e');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('企業一覧')),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemCount: CompanyListPage.companies.length,
-        itemBuilder: (context, index) {
-          final company = CompanyListPage.companies[index];
-          return CompanyCard(company: company);
-        },
-      ),
+      body:
+          CompanyListPage.companies.isEmpty
+              ? const Center(child: CircularProgressIndicator())
+              : ListView.builder(
+                padding: const EdgeInsets.all(16.0),
+                itemCount: CompanyListPage.companies.length,
+                itemBuilder: (context, index) {
+                  final company = CompanyListPage.companies[index];
+                  return CompanyCard(company: company);
+                },
+              ),
     );
   }
 }
@@ -58,7 +95,7 @@ class CompanyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final favoriteManager = context.watch<FavoriteManager>(); // Provider でお気に入り情報を監視
+    final favoriteManager = context.watch<FavoriteManager>();
     final isFavorite = favoriteManager.isFavorite(company);
 
     return Card(
@@ -125,7 +162,7 @@ class CompanyCard extends StatelessWidget {
                   children: [
                     const Icon(Icons.category, size: 16, color: Colors.grey),
                     const SizedBox(width: 4),
-                    Text(company.industry),
+                    Text(company.industry ?? '未設定'),
                   ],
                 ),
                 const SizedBox(height: 4),
@@ -141,7 +178,14 @@ class CompanyCard extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      // 企業詳細ページへ遷移
+                      // 企業詳細ページへ遷移（会社情報を渡す）
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => CompanyDetailsPage(company: company),
+                        ),
+                      );
                     },
                     child: const Text('詳細を見る'),
                   ),

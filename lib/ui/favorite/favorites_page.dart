@@ -5,34 +5,29 @@ import 'package:kitakyushu_shukatu/ui/favorite/favorite_manager.dart';
 class FavoritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final favoriteManager = Provider.of<FavoriteManager>(context);
+    final favoriteCompanies =
+        context.watch<FavoriteManager>().favoriteCompanies;
 
     return Scaffold(
-      appBar: AppBar(title: Text('お気に入り')),
-      body: FutureBuilder(
-        future: favoriteManager.fetchFavoriteCompanies(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-
-          final favorites = favoriteManager.favoriteCompanies;
-          if (favorites.isEmpty) {
-            return Center(child: Text('お気に入りの企業はありません'));
-          }
-
-          return ListView.builder(
-            itemCount: favorites.length,
-            itemBuilder: (context, index) {
-              final company = favorites[index];
-              return ListTile(
-                title: Text(company.name),
-                subtitle: Text(company.industry),
-              );
-            },
-          );
-        },
-      ),
+      appBar: AppBar(title: const Text('お気に入り')),
+      body:
+          favoriteCompanies.isEmpty
+              ? const Center(child: Text('お気に入りの企業がありません'))
+              : ListView.builder(
+                padding: const EdgeInsets.all(16.0),
+                itemCount: favoriteCompanies.length,
+                itemBuilder: (context, index) {
+                  final company = favoriteCompanies[index];
+                  return ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.pink[100],
+                      child: Text(company.name[0]), // 頭文字
+                    ),
+                    title: Text(company.name),
+                    subtitle: Text(company.industry ?? '未設定'),
+                  );
+                },
+              ),
     );
   }
 }
