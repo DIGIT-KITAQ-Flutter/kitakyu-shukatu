@@ -41,8 +41,8 @@ class _EmailSignUpState extends State<EmailSignUpPage> {
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userId)
-          .collection('data')
-          .doc('favoriteCompanies')
+          .collection('favoriteCompanies')
+          .doc('')
           .set({});
 
       await FirebaseFirestore.instance
