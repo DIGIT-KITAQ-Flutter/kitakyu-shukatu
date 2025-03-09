@@ -11,51 +11,56 @@ class FavoriteManager extends ChangeNotifier {
 
   List<Company> get favoriteCompanies => _favoriteCompanies;
 
-  /// Firestoreからお気に入り企業を取得
+  /// ✅ 【1】Firestoreからお気に入り企業を取得
   Future<void> fetchFavoriteCompanies() async {
     final user = _auth.currentUser;
-    if (user == null) return;
+    if (user == null) return;  // ログインしていない場合はreturn
 
+    // Firestoreからログインユーザーに紐づくデータを取得
     final snapshot = await _firestore
         .collection('users')
-        .doc(user.uid)
+        .doc(user.uid)  // ←ここでユーザーIDを紐づける
         .collection('favoriteCompanies')
         .get();
 
+    // 取得データをCompanyモデルに変換
     _favoriteCompanies = snapshot.docs.map((doc) {
       final data = doc.data();
       return Company(
         id: doc.id,
         name: data['name'],
         industry: data['industry'],
-        location: data['location'],
-        imageUrl: data['imageUrl'],
+        location: data['location'] ?? '',
+        imageUrl: data['imageUrl'] ?? '',
       );
     }).toList();
 
     notifyListeners();
   }
 
-  /// お気に入り登録/解除
+  /// ✅ 【2】お気に入り登録/解除
   Future<void> toggleFavorite(Company company) async {
     final user = _auth.currentUser;
     if (user == null) return;
 
+    // Firestoreのパス
     final docRef = _firestore
         .collection('users')
         .doc(user.uid)
         .collection('favoriteCompanies')
         .doc(company.id);
 
-    if (_favoriteCompanies.contains(company)) {
-      // すでに登録済みなら解除
+    // すでにお気に入り登録されている場合は削除
+    if (_favoriteCompanies.any((c) => c.id == company.id)) {
       await docRef.delete();
-      _favoriteCompanies.remove(company);
+      _favoriteCompanies.removeWhere((c) => c.id == company.id);
     } else {
-      // 未登録ならお気に入り登録
+      // お気に入り登録されていない場合は新規追加
       await docRef.set({
         'name': company.name,
         'industry': company.industry,
+        'location': company.location,
+        'imageUrl': company.imageUrl,
       });
       _favoriteCompanies.add(company);
     }
@@ -63,7 +68,7 @@ class FavoriteManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// お気に入り登録済みかどうかを判定
+  /// ✅ 【3】お気に入り済みかどうか判定
   bool isFavorite(Company company) {
     return _favoriteCompanies.any((c) => c.id == company.id);
   }
