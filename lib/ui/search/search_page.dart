@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kitakyushu_shukatu/ui/Company/company_list_page.dart'; // 企業一覧のデータを使う
+import 'package:kitakyushu_shukatu/ui/company/company_details_page.dart';
+import 'package:kitakyushu_shukatu/models/company.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -10,8 +12,8 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   TextEditingController _searchController = TextEditingController();
-  List<String> _allCompanies = []; // 企業一覧データ
-  List<String> _filteredCompanies = []; // 検索結果
+  List<Company> _allCompanies = []; // 企業一覧データ
+  List<Company> _filteredCompanies = []; // 検索結果
 
   @override
   void initState() {
@@ -22,7 +24,7 @@ class _SearchPageState extends State<SearchPage> {
   // 企業一覧のデータを取得
   void _loadCompanies() {
     setState(() {
-      _allCompanies = CompanyListPage.companies.map((company) => company.name).toList(); // 企業データを取得
+      _allCompanies = List.from(CompanyListPage.companies); // 企業データを取得
       _filteredCompanies = List.from(_allCompanies);
     });
   }
@@ -33,9 +35,13 @@ class _SearchPageState extends State<SearchPage> {
       if (query.isEmpty) {
         _filteredCompanies = List.from(_allCompanies);
       } else {
-        _filteredCompanies = _allCompanies
-            .where((company) => company.toLowerCase().contains(query.toLowerCase()))
-            .toList();
+        _filteredCompanies =
+            _allCompanies
+                .where(
+                  (company) =>
+                      company.name.toLowerCase().contains(query.toLowerCase()),
+                )
+                .toList();
       }
     });
   }
@@ -43,14 +49,11 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.pink[50], // **背景色を淡いピンクに**
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text('検索'),
-      ),
+      backgroundColor: Colors.pink[50], // 背景色を淡いピンクに
+      appBar: AppBar(backgroundColor: Colors.white, title: const Text('検索')),
       body: Column(
         children: [
-          // **検索バー + 追加ボタン**
+          // 検索バー + 追加ボタン
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -62,7 +65,7 @@ class _SearchPageState extends State<SearchPage> {
                       hintText: '企業名を検索',
                       prefixIcon: Icon(Icons.search, color: Colors.purple),
                       filled: true,
-                      fillColor: Colors.purple[50], // **淡い紫の背景**
+                      fillColor: Colors.purple[50], // 淡い紫の背景
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
@@ -72,10 +75,10 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                // **追加ボタン**
+                // 追加ボタン
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.purple[100], // **ボタンの背景**
+                    color: Colors.purple[100], // ボタンの背景
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
@@ -89,29 +92,44 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ),
 
-          // **企業リスト表示**
+          // 企業リスト表示
           Expanded(
-            child: ListView.builder(
-              itemCount: _filteredCompanies.length,
-              itemBuilder: (context, index) {
-                String companyName = _filteredCompanies[index];
-                String firstLetter = companyName.isNotEmpty ? companyName[0] : '?'; // **頭文字を取得**
+            child:
+                _filteredCompanies.isEmpty
+                    ? const Center(child: Text('企業が見つかりません'))
+                    : ListView.builder(
+                      itemCount: _filteredCompanies.length,
+                      itemBuilder: (context, index) {
+                        Company company = _filteredCompanies[index];
+                        String firstLetter =
+                            company.name.isNotEmpty
+                                ? company.name[0]
+                                : '?'; // 頭文字を取得
 
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.purple[100], // **アイコン背景**
-                    child: Text(
-                      firstLetter, // **企業名の頭文字を表示**
-                      style: const TextStyle(color: Colors.white),
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.purple[100], // アイコン背景
+                            child: Text(
+                              firstLetter, // 企業名の頭文字を表示
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          title: Text(company.name),
+                          subtitle: Text(company.industry ?? '未設定'),
+                          onTap: () {
+                            // 企業詳細ページへ遷移（会社情報を渡す）
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) =>
+                                        CompanyDetailsPage(company: company),
+                              ),
+                            );
+                          },
+                        );
+                      },
                     ),
-                  ),
-                  title: Text(companyName),
-                  onTap: () {
-                    // 企業詳細ページへ遷移（未実装）
-                  },
-                );
-              },
-            ),
           ),
         ],
       ),
