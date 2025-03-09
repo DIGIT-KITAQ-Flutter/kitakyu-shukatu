@@ -165,14 +165,6 @@ class CompanyCard extends StatelessWidget {
                     Text(company.industry ?? '未設定'),
                   ],
                 ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    const Icon(Icons.location_on, size: 16, color: Colors.grey),
-                    const SizedBox(width: 4),
-                    Text(company.location),
-                  ],
-                ),
                 const SizedBox(height: 12),
                 SizedBox(
                   width: double.infinity,
