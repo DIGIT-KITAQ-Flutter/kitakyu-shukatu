@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kitakyushu_shukatu/ui/company/company_details_page.dart';
 import 'package:provider/provider.dart';
 import 'package:kitakyushu_shukatu/ui/favorite/favorite_manager.dart';
+import 'package:kitakyushu_shukatu/models/company.dart';
 
 class FavoritesPage extends StatefulWidget {
   @override
@@ -9,20 +10,19 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class _FavoritesPageState extends State<FavoritesPage> {
-  bool _isLoading = true; // ローディング状態管理
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _fetchFavorites(); // Firestoreからお気に入り企業を取得
+    _fetchFavorites();
   }
 
-  /// Firestoreからお気に入り企業を取得する関数
   Future<void> _fetchFavorites() async {
     final favoriteManager = context.read<FavoriteManager>();
     await favoriteManager.fetchFavoriteCompanies();
     setState(() {
-      _isLoading = false; // ローディング終了
+      _isLoading = false;
     });
   }
 
@@ -34,7 +34,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
     return Scaffold(
       appBar: AppBar(title: const Text('お気に入り企業')),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator()) // ローディング中
+          ? const Center(child: CircularProgressIndicator())
           : favoriteCompanies.isEmpty
               ? const Center(child: Text('お気に入りの企業がありません'))
               : ListView.builder(
@@ -44,16 +44,13 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     final company = favoriteCompanies[index];
                     return ListTile(
                       leading: CircleAvatar(
-                        backgroundColor: Colors.pink[100],
                         backgroundImage: NetworkImage(company.imageUrl),
-                        onBackgroundImageError: (_, __) {
-                          // Handle the error, e.g., log it or set a flag
-                        },
+                        backgroundColor: Colors.pink[100],
                       ),
                       title: Text(company.name),
                       subtitle: Text(company.industry ?? '未設定'),
+                      trailing: _buildProgressDropdown(context, company),
                       onTap: () {
-                        // 詳細画面に遷移
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -65,6 +62,30 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     );
                   },
                 ),
+    );
+  }
+
+  /// ✅ 進行度タグのドロップダウンメニュー
+  Widget _buildProgressDropdown(BuildContext context, Company company) {
+    final favoriteManager = context.read<FavoriteManager>();
+
+    return DropdownButton<String>(
+      value: company.progress ?? '進行度',
+      icon: const Icon(Icons.timer_outlined),
+      items: const [
+        DropdownMenuItem(value: '進行度', child: Text('進行度')),
+        DropdownMenuItem(value: 'ES提出前', child: Text('ES提出前')),
+        DropdownMenuItem(value: 'ES提出中', child: Text('ES提出中')),
+        DropdownMenuItem(value: '適性テスト受験済み', child: Text('適性テスト受験済み')),
+        DropdownMenuItem(value: '1次試験', child: Text('1次試験')),
+        DropdownMenuItem(value: '2次試験', child: Text('2次試験')),
+        DropdownMenuItem(value: '内定', child: Text('内定')),
+      ],
+      onChanged: (newValue) {
+        if (newValue != null) {
+          favoriteManager.updateProgress(company, newValue);
+        }
+      },
     );
   }
 }
