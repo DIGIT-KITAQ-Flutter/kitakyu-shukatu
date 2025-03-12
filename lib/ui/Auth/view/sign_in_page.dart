@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 import 'dart:math';
-
 import 'package:kitakyushu_shukatu/ui/main/main_page.dart';
 
 class AuthPage extends StatefulWidget {
@@ -32,6 +31,7 @@ class _AuthPage extends State<AuthPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('LoginPage')),
+       backgroundColor: Colors.lightBlue[50], 
       body: BackgroundAnimation1(
         size: MediaQuery.of(context).size,
         child: Padding(
@@ -41,7 +41,7 @@ class _AuthPage extends State<AuthPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                  'Login',
+                  'ログイン',
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 ),
                 TextFormField(
@@ -98,7 +98,7 @@ class _AuthPage extends State<AuthPage> {
                         emailController.clear();
                         passwordController.clear();
 
-                        // `push` ではなく `pushReplacement` を使う
+                        // push ではなく pushReplacement を使う
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
