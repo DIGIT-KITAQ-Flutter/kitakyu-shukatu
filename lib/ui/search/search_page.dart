@@ -49,8 +49,8 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.pink[50], // 背景色を淡いピンクに
-      appBar: AppBar(backgroundColor: Colors.white, title: const Text('検索')),
+      backgroundColor: Colors.lightBlue[25], // 背景色を淡いピンクに
+      appBar: AppBar(backgroundColor: Colors.lightBlue[25], title: const Text('検索')),
       body: Column(
         children: [
           // 検索バー + 追加ボタン
@@ -63,7 +63,7 @@ class _SearchPageState extends State<SearchPage> {
                     controller: _searchController,
                     decoration: InputDecoration(
                       hintText: '企業名を検索',
-                      prefixIcon: Icon(Icons.search, color: Colors.purple),
+                      prefixIcon: Icon(Icons.search, color: Colors.lightBlue[50]),
                       filled: true,
                       fillColor: Colors.purple[50], // 淡い紫の背景
                       border: OutlineInputBorder(
@@ -78,7 +78,7 @@ class _SearchPageState extends State<SearchPage> {
                 // 追加ボタン
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.purple[100], // ボタンの背景
+                    color: Colors.lightBlue[100], // ボタンの背景
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(

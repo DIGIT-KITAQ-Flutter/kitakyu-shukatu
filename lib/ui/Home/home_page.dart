@@ -19,17 +19,23 @@ class _HomePageState extends State<HomePage> {
     companies = List.from(CompanyListPage.companies); // 修正
   }
 
-  @override
+   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.lightBlue[50], // 背景色を薄い水色に統一
       appBar: AppBar(
-        title: const Text("北九就"),
-        backgroundColor: Colors.white,
+        title: const Text(
+          "北九就",
+          style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold), // タイトルを大きく
+        ),
+        backgroundColor: Colors.transparent,
         elevation: 0,
+        centerTitle: true, // タイトルを中央配置
       ),
       body: Column(
         children: [
           const SizedBox(height: 20),
+
           // 企業の横スクロールリストを `Expanded` で適切に配置
           Expanded(
             child: SizedBox(
@@ -60,10 +66,13 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (context) => const MapPage()),
                 );
               },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                textStyle: const TextStyle(fontSize: 18),
-                backgroundColor: Colors.grey[300], // 背景色を画像に合わせる
+             style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10), // 角丸
+                ),
+                elevation: 5, // 影をつけて立体感を出す
+                textStyle: const TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
               ),
               child: const Text("北九州マップ", style: TextStyle(color: Colors.black)),
             ),

@@ -55,12 +55,12 @@ class _MyPageState extends State<MyPage> {
               children: [
                 Container(
                   padding: const EdgeInsets.all(8.0),
-                  color: Colors.grey[300],
+                  color: Colors.white,
                   child: TextField(
                     controller: _nameController,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
-                      hintText: '名前',
+                      hintText: '(名前)',
                     ),
                     onChanged: (value) => _saveUserData(),
                   ),
@@ -69,7 +69,7 @@ class _MyPageState extends State<MyPage> {
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.all(8.0),
-                    color: Colors.grey[300],
+                    color: Colors.white,
                     child: TextField(
                       controller: _noteController,
                       maxLines: null,
@@ -77,7 +77,7 @@ class _MyPageState extends State<MyPage> {
                       keyboardType: TextInputType.multiline,
                       decoration: const InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'ノート',
+                        hintText: '（メモ）',
                       ),
                       onChanged: (value) => _saveUserData(),
                     ),
