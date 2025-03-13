@@ -56,16 +56,23 @@ class _CompanyDetailsPageState extends State<CompanyDetailsPage> {
             const SizedBox(height: 8),
 
             // 業種
-            Row(
-              children: [
-                const Icon(Icons.category, color: Colors.grey),
-                const SizedBox(width: 8),
-                Text(
-                  '業種: ${widget.company.industry}',
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ],
-            ),
+Row(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    const Icon(Icons.category, color: Colors.grey),
+    const SizedBox(width: 8),
+    Expanded( // 追加: 長いテキストを折り返すために Expanded を使用
+      child: Text(
+        '業種: ${widget.company.industry}',
+        style: const TextStyle(fontSize: 16),
+        maxLines: 2, // 追加: 最大2行
+        overflow: TextOverflow.ellipsis, // 追加: 2行を超えた場合は「...」を表示
+        softWrap: true, // 追加: 自然な改行を許可
+      ),
+    ),
+  ],
+),
+
 
             const SizedBox(height: 8),
 
