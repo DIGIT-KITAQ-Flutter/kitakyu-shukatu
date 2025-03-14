@@ -89,20 +89,20 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
             ),
             actions: <Widget>[
               if (info.documentId != null)
+                // TextButton(
+                //   child: const Text('詳細'),
+                //   onPressed: () {
+                //     Navigator.of(context).pop();
+                //     // 詳細ページへ遷移する処理
+                //     // Navigator.of(context).push(MaterialPageRoute(
+                //     //   builder: (context) => CompanyDetailPage(companyId: info.documentId!),
+                //     // ));
+                //   },
+                // ),
                 TextButton(
-                  child: const Text('詳細'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    // 詳細ページへ遷移する処理
-                    // Navigator.of(context).push(MaterialPageRoute(
-                    //   builder: (context) => CompanyDetailPage(companyId: info.documentId!),
-                    // ));
-                  },
+                  child: const Text('閉じる'),
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
-              TextButton(
-                child: const Text('閉じる'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
             ],
           ),
     );
