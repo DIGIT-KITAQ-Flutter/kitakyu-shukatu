@@ -48,17 +48,27 @@ class _CompanyListPageState extends State<CompanyListPage> {
           locationStr = '未設定';
         }
 
+        // 画像URLの取得とログ出力
+        String imageUrl =
+            data['imageUrl'] ?? data['imageURL'] ?? data['image_url'] ?? '';
+        print('Company ${data['name']} image URL: $imageUrl');
+
         companiesList.add(
           Company(
             id: company.id,
             name: data['name'] ?? '名称未設定',
             industry: data['d_inlineblock'] ?? '未設定',
             location: locationStr,
-            imageUrl: data['imageUrl'] ?? '',
+            imageUrl:
+                imageUrl.isNotEmpty
+                    ? imageUrl
+                    : 'https://via.placeholder.com/150',
           ),
         );
       });
-
+      if (companiesList.isNotEmpty) {
+        print('First company image URL: ${companiesList[0].imageUrl}');
+      }
       print('Fetched ${companiesList.length} companies');
       setState(() {
         print('Setting companies...');
