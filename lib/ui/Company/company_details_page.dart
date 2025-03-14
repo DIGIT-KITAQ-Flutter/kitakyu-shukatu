@@ -56,34 +56,39 @@ class _CompanyDetailsPageState extends State<CompanyDetailsPage> {
             const SizedBox(height: 8),
 
             // 業種
-Row(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-    const Icon(Icons.category, color: Colors.grey),
-    const SizedBox(width: 8),
-    Expanded( // 追加: 長いテキストを折り返すために Expanded を使用
-      child: Text(
-        '業種: ${widget.company.industry}',
-        style: const TextStyle(fontSize: 16),
-        maxLines: 2, // 追加: 最大2行
-        overflow: TextOverflow.ellipsis, // 追加: 2行を超えた場合は「...」を表示
-        softWrap: true, // 追加: 自然な改行を許可
-      ),
-    ),
-  ],
-),
-
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.category, color: Colors.grey),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '業種: ${widget.company.industry}',
+                    style: const TextStyle(fontSize: 16),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
+                  ),
+                ),
+              ],
+            ),
 
             const SizedBox(height: 8),
 
-            // 所在地
+            // 所在地（`,` の後で改行）
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Icon(Icons.location_on, color: Colors.grey),
                 const SizedBox(width: 8),
-                Text(
-                  '所在地: ${widget.company.location}',
-                  style: const TextStyle(fontSize: 16),
+                Expanded(
+                  child: Text.rich(
+                    TextSpan(
+                      children: _splitLocation(widget.company.location),
+                    ),
+                    style: const TextStyle(fontSize: 16),
+                    softWrap: true,
+                  ),
                 ),
               ],
             ),
@@ -109,11 +114,31 @@ Row(
                 );
               },
             ),
-
-            // ここに追加情報などを表示
           ],
         ),
       ),
     );
+  }
+
+  /// ✅ `,` の後で改行する関数
+  List<TextSpan> _splitLocation(String location) {
+    List<TextSpan> spans = [];
+    RegExp regex = RegExp(r','); // `,` の後で改行
+    Iterable<Match> matches = regex.allMatches(location);
+
+    if (matches.isEmpty) {
+      // `,` がなければそのまま表示
+      return [TextSpan(text: location)];
+    }
+
+    int lastIndex = 0;
+    for (var match in matches) {
+      spans.add(TextSpan(text: location.substring(lastIndex, match.end))); // `,` まで追加
+      spans.add(const TextSpan(text: '\n', style: TextStyle(height: 0.8))); // 改行
+      lastIndex = match.end; // `,` の後から次のテキストを取得
+    }
+    spans.add(TextSpan(text: location.substring(lastIndex))); // 残りのテキストを追加
+
+    return spans;
   }
 }
