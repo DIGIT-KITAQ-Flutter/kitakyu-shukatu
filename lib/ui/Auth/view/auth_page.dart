@@ -36,7 +36,7 @@ class _AuthPageState extends State<AuthPage> {
               ),
               // メールアドレスでサインアップ
               ElevatedButton(
-                child: const Text('メールアドレスでサインアップ'),
+                child: const Text('新しくアカウントを作成'),
                 onPressed: () {
                   Navigator.push(
                     context,

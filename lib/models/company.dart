@@ -5,6 +5,7 @@ class Company {
   final String? industry;
   final String location;
   final String imageUrl;
+String progress; 
 
   Company({
     required this.id,
@@ -12,5 +13,6 @@ class Company {
     this.industry,
     required this.location,
     required this.imageUrl,
+     this.progress = '進行度', 
   });
 }

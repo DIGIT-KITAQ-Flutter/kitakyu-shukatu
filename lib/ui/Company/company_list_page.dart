@@ -42,7 +42,7 @@ class _CompanyListPageState extends State<CompanyListPage> {
         if (data['location'] is GeoPoint) {
           GeoPoint geoPoint = data['location'];
           locationStr = '${geoPoint.latitude}, ${geoPoint.longitude}';
-        } else if (data['location'] is String) {
+        } else if (data['location'] is String) {  
           locationStr = data['location'];
         } else {
           locationStr = '未設定';
@@ -57,7 +57,7 @@ class _CompanyListPageState extends State<CompanyListPage> {
           Company(
             id: company.id,
             name: data['name'] ?? '名称未設定',
-            industry: data['industry'] ?? '未設定',
+            industry: data['d_inlineblock'] ?? '未設定',
             location: locationStr,
             imageUrl:
                 imageUrl.isNotEmpty
@@ -168,13 +168,23 @@ class CompanyCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const Icon(Icons.category, size: 16, color: Colors.grey),
-                    const SizedBox(width: 4),
-                    Text(company.industry ?? '未設定'),
-                  ],
-                ),
+               Row(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    Icon(Icons.category, color: Colors.grey, size: 16),
+    SizedBox(width: 8),
+    Expanded( // 追加: 業種名を折り返すために Expanded を使用
+      child: Text(
+        company.industry ?? '未設定',
+        style: TextStyle(fontSize: 14),
+        maxLines: 2, // 2行まで表示
+        overflow: TextOverflow.ellipsis, // 超えたら「...」を表示
+        softWrap: true, // 自然な改行を許可
+      ),
+    ),
+  ],
+),
+
                 const SizedBox(height: 12),
                 SizedBox(
                   width: double.infinity,
