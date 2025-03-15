@@ -17,16 +17,20 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     companies = List.from(CompanyListPage.companies); // 修正
+    companies.shuffle(); // リストをランダムに並び替え
   }
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.lightBlue[50], // 背景色を薄い水色に統一
       appBar: AppBar(
         title: const Text(
           "北九就",
-          style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold), // タイトルを大きく
+          style: TextStyle(
+            fontSize: 50,
+            fontWeight: FontWeight.bold,
+          ), // タイトルを大きく
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -66,15 +70,21 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (context) => const MapPage()),
                 );
               },
-             style: ElevatedButton.styleFrom(
+              style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10), // 角丸
                 ),
                 elevation: 5, // 影をつけて立体感を出す
-                textStyle: const TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                textStyle: const TextStyle(
+                  fontSize: 35,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              child: const Text("北九州マップ", style: TextStyle(color: Colors.black)),
+              child: const Text(
+                "北九州マップ",
+                style: TextStyle(color: Colors.black),
+              ),
             ),
           ),
         ],

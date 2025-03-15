@@ -21,6 +21,7 @@ class _CompanyListPageState extends State<CompanyListPage> {
       print('Fetching companies...');
       _fetchCompany();
     }
+    CompanyListPage.companies.shuffle(); // リストをランダムに並び替え
   }
 
   Future<void> _fetchCompany() async {
@@ -42,7 +43,7 @@ class _CompanyListPageState extends State<CompanyListPage> {
         if (data['location'] is GeoPoint) {
           GeoPoint geoPoint = data['location'];
           locationStr = '${geoPoint.latitude}, ${geoPoint.longitude}';
-        } else if (data['location'] is String) {  
+        } else if (data['location'] is String) {
           locationStr = data['location'];
         } else {
           locationStr = '未設定';
@@ -168,22 +169,23 @@ class CompanyCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-               Row(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-    Icon(Icons.category, color: Colors.grey, size: 16),
-    SizedBox(width: 8),
-    Expanded( // 追加: 業種名を折り返すために Expanded を使用
-      child: Text(
-        company.industry ?? '未設定',
-        style: TextStyle(fontSize: 14),
-        maxLines: 2, // 2行まで表示
-        overflow: TextOverflow.ellipsis, // 超えたら「...」を表示
-        softWrap: true, // 自然な改行を許可
-      ),
-    ),
-  ],
-),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(Icons.category, color: Colors.grey, size: 16),
+                    SizedBox(width: 8),
+                    Expanded(
+                      // 追加: 業種名を折り返すために Expanded を使用
+                      child: Text(
+                        company.industry ?? '未設定',
+                        style: TextStyle(fontSize: 14),
+                        maxLines: 2, // 2行まで表示
+                        overflow: TextOverflow.ellipsis, // 超えたら「...」を表示
+                        softWrap: true, // 自然な改行を許可
+                      ),
+                    ),
+                  ],
+                ),
 
                 const SizedBox(height: 12),
                 SizedBox(
