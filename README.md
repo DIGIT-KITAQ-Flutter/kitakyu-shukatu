@@ -17,3 +17,5 @@ firebase deploy --only hosting
 ```
 ### 発表スライド(アプリの機能やアーキテクチャ図などを説明してます)
 https://www.canva.com/design/DAGhQR2RuMo/QSSS4GDVFtqM2z36QxMDxA/edit
+でも動画
+https://www.youtube.com/watch?v=rO33FMJ_I9g
